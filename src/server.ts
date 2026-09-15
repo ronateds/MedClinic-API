@@ -1,10 +1,13 @@
 import 'reflect-metadata';
 import express from 'express';
 import { AppDataSource } from './database/data-source';
+import usuarioRoutes from './routes/usuario.routes';
 
 const app = express();
 
 app.use(express.json());
+
+app.use(usuarioRoutes);
 
 AppDataSource.initialize()
     .then(() => {
