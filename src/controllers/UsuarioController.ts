@@ -4,6 +4,7 @@ import { Usuario, UsuarioRole } from "../entities/Usuario";
 import { CreateUsuarioDto } from "../dtos/CreateUsuarioDto";
 import { AppError } from "../errors/AppError";
 import bcrypt from "bcryptjs"
+import { gerarToken } from "../utils/jwt";
 
 const usuarioRepository = AppDataSource.getRepository(Usuario);
 export class UsuarioController {
@@ -29,5 +30,31 @@ export class UsuarioController {
             email: savedUsuario.email,
             role: savedUsuario.role
         });
+    }
+
+    async login(req: Request, res: Response): Promise<Response> {
+        const { email, senha } = req.body
+
+        if (!email || !senha) {
+            throw new AppError("email, senha são obrigatórios.", 400)
+        }
+
+        const usuario = await usuarioRepository.findOneBy({ email })
+        if (!usuario) throw new AppError("Credenciais Inválidas", 401)
+
+        const senhaCorreta = await bcrypt.compare(senha, usuario.senha)
+        if (!senhaCorreta) throw new AppError("Credenciais Inválidas", 401)
+
+        const token = gerarToken({ sub: usuario.id.toString(), role: usuario.role as UsuarioRole })
+
+        return res.json({
+            token,
+            usuario: {
+                id: usuario.id,
+                nome: usuario.nome,
+                email: usuario.email,
+                role: usuario.role
+            }
+        })
     }
 }
