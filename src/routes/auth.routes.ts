@@ -4,14 +4,14 @@ import { asyncHandler } from "../middlewares/asyncHandler";
 import { validateDto } from "../middlewares/validate";
 import { CreateUsuarioDto } from "../dtos/CreateUsuarioDto";
 
-const usuarioRoutes = Router();
+const authRoutes = Router();
 
 const usuarioController = new UsuarioController();
 
-usuarioRoutes.post(
-    '/usuarios',
+authRoutes.post(
+    '/register',
     validateDto(CreateUsuarioDto),
     asyncHandler((req, res) => usuarioController.create(req, res))
 );
 
-export default usuarioRoutes;
+export default authRoutes;
