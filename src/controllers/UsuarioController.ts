@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { AppDataSource } from "../database/data-source";
-import { Usuario } from "../entities/Usuario";
+import { Usuario, UsuarioRole } from "../entities/Usuario";
 import { CreateUsuarioDto } from "../dtos/CreateUsuarioDto";
 import { AppError } from "../errors/AppError";
 import bcrypt from "bcryptjs"
@@ -19,7 +19,7 @@ export class UsuarioController {
             nome,
             email,
             senha: senhaHash,
-            role
+            role: role === "ADMINISTRADOR" ? UsuarioRole.ADMINISTRADOR : UsuarioRole.ATENDENTE
         });
         const savedUsuario = await usuarioRepository.save(usuario);
 

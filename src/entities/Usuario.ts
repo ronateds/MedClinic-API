@@ -1,5 +1,10 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
 
+export enum UsuarioRole {
+    ADMINISTRADOR = "ADMINISTRADOR",
+    ATENDENTE = "ATENDENTE"
+}
+
 @Entity('usuarios')
 export class Usuario {
     @PrimaryGeneratedColumn('identity')
