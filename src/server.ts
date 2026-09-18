@@ -1,14 +1,14 @@
 import 'reflect-metadata';
 import express from 'express';
 import { AppDataSource } from './database/data-source';
-import authRoutes from './routes/auth.routes';
 import { errorHandler } from './middlewares/errorHandler';
+import { routes } from './routes';
 
 const app = express();
 
 app.use(express.json());
 
-app.use(authRoutes);
+app.use(routes);
 
 app.use(errorHandler);
 
