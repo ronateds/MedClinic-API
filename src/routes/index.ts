@@ -14,7 +14,6 @@ const usuarioController = new UsuarioController();
 
 routes.get(
     "/users/me",
-    roleMiddleware(UsuarioRole.ATENDENTE),
     authMiddleware,
     asyncHandler((req, res) => usuarioController.meuPerfil(req, res))
 )
