@@ -11,8 +11,8 @@ export class UsuarioController {
     async create(req: Request, res: Response): Promise<Response> {
         const { nome, email, senha, role }: CreateUsuarioDto = req.body;
 
-        const emailExite = await usuarioRepository.findOneBy({email});
-        if(emailExite) throw new AppError("Email já cadastrado", 400);
+        const emailExite = await usuarioRepository.findOneBy({ email });
+        if (emailExite) throw new AppError("Email já cadastrado", 400);
 
         const senhaHash = await bcrypt.hash(senha, 10);
 
@@ -49,12 +49,22 @@ export class UsuarioController {
 
         return res.json({
             token,
-            usuario: {
-                id: usuario.id,
-                nome: usuario.nome,
-                email: usuario.email,
-                role: usuario.role
-            }
+            id: usuario.id
+        })
+    }
+
+    async meuPerfil(req: Request, res: Response): Promise<Response> {
+        const usuario = await usuarioRepository.findOne({
+            where: { id: Number(req.usuario?.sub) }
+        })
+
+        if (!usuario) throw new AppError("usuario não encontrado", 404)
+
+        return res.json({
+            id: usuario.id,
+            nome: usuario.nome,
+            email: usuario.email,
+            role: usuario.role
         })
     }
 }
