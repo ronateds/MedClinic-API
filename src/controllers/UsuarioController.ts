@@ -67,4 +67,8 @@ export class UsuarioController {
             role: usuario.role
         })
     }
+
+    async adminPing(req: Request, res: Response): Promise<Response> {
+        return res.json({ message: "ok, admin" })
+    }
 }
